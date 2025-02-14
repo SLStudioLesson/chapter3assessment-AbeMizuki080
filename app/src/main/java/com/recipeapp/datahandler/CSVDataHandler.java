@@ -18,13 +18,38 @@ public class CSVDataHandler implements DataHandler {
 
     @Override
     public String getMode(){
-        return "CSV";  
+        return "CSV";
+    }
+
+    @Override
+    public ArrayList<Recipe> readData() throws IOException {
+        ArrayList<Recipe> recipes = new ArrayList<>();
+    
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String recipeName = parts[0].trim();
+                
+                ArrayList<Ingredient> ingredients = new ArrayList<>();
+                
+                for (int i = 1; i < parts.length; i++) {
+                    String ingredientName = parts[i].trim();
+                    ingredients.add(new Ingredient(ingredientName));  
+                }
+
+                recipes.add(new Recipe(recipeName, ingredients)); 
+            }
+        } catch (IOException e) {
+            throw new IOException("Error reading file: " + e.getMessage());
+        }
+        return recipes;
     }
 
     @Override
     public void writeData(Recipe recipe) throws IOException{
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
- 
+
             writer.write(recipe.getName());
 
             for (Ingredient ingredient : recipe.getIngredients()) {
@@ -38,16 +63,9 @@ public class CSVDataHandler implements DataHandler {
         }
     }
 
-
-    @Override
-    public ArrayList<Recipe> readData() throws IOException{
-
-        return new ArrayList<>();
-    }
-
     @Override
     public ArrayList<Recipe> searchData(String keyword) throws IOException{
 
-        return new ArrayList<>();
+        return null;
     }
 }

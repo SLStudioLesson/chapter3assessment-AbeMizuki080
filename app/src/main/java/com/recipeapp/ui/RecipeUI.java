@@ -28,8 +28,6 @@ public class RecipeUI {
     
     public void displayMenu() {
 
-        System.out.println("Current mode: " + dataHandler.getMode());
-
         while (true) {
             try {
                 System.out.println();
@@ -44,23 +42,20 @@ public class RecipeUI {
 
                 switch (choice) {
                     case "1":
-                    displayMenu();
+                    displayRecipes();
                         break;
                     case "2":
                     addNewRecipe();
                         break;
                     case "3":
-                        searchData();
                         break;
                     case "4":
-                        System.out.println("Exiting the application.");
                         break;
                     default:
-                        System.out.println("Invalid choice. Please select again.");
                         break;
                 }
             } catch (IOException e) {
-                System.out.println("Error reading input from user: " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -81,26 +76,6 @@ public class RecipeUI {
             }
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
-        }
-    }
-
-    private void searchData(){
-        try {
-            System.out.print("Enter recipe name to search: ");
-            String nameToSearch = reader.readLine();
-
-            ArrayList<Recipe> recipes = dataHandler.readData();
-
-            for (Recipe recipe : recipes){
-                if(recipe.getName().toLowerCase().equals(nameToSearch.toLowerCase())){
-                    System.out.println("Recipe found: " + recipe.getName());
-                    return;
-                }
-
-            }
-            System.out.println("Recipe not found.");
-        } catch (Exception e) {
-            System.out.println("Error reading input: " + e.getMessage());
         }
     }
 
@@ -128,17 +103,18 @@ public class RecipeUI {
                 }
             }
 
-            // List<Ingredient> ingredients2 = new ArrayList<>();
-            // for(String ingredientname :ingredients){
-            //     ingredients2.add(new Ingredient(recipeName));
-            // }
+            ArrayList<Ingredient> ingredientsArrayList = new ArrayList<>(ingredients);
 
-            Recipe newRecipe = new Recipe(recipeName, ingredients);
+            Recipe newRecipe = new Recipe(recipeName, ingredientsArrayList);
 
             dataHandler.writeData(newRecipe);
+
             System.out.println("Recipe added successfully.");
+
         } catch (IOException e) {
+
             System.out.println("Failed to add new recipe: " + e.getMessage());
+            
         }
     }
 

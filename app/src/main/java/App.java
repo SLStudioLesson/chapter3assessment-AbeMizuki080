@@ -5,7 +5,6 @@ import com.recipeapp.ui.RecipeUI;
 import java.io.*;
 
 public class App {
-
     public static void main(String[] args) {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
@@ -15,7 +14,7 @@ public class App {
             System.out.print("Select (1/2): ");
             String choice = reader.readLine();
 
-            DataHandler dataHandler = null;
+            DataHandler dataHandler = new CSVDataHandler();
 
             if(choice.equals("1")){
                 dataHandler = new CSVDataHandler();
@@ -25,15 +24,10 @@ public class App {
                 System.out.println("Current moed: JSON");
             }else {
                 System.out.println("Current mode: CSV");
-                return;
             }
 
             RecipeUI recipeUI =new RecipeUI(dataHandler);
             recipeUI.displayMenu();
-            
-            if(dataHandler != null){
-                System.out.println("Data handler selected: " + dataHandler.getClass().getSimpleName());
-            }
 
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
